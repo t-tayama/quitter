@@ -1,0 +1,16 @@
+usersinfo
+
+superuser
+ID:     admin
+PASS:   pass
+
+
+
+user
+ID:     bird
+        cat
+        dog
+        penguin
+        pig
+        t-tayama
+PASS:   userpass

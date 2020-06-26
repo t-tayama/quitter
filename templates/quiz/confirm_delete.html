@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+{% if request_user == quiz_author %}
+
+    <div class="card mb-3">
+    <h2 class="card-header bg-dark text-white">{{quiz.title}}</h2>
+        <div class="card-body">
+            <p>カテゴリ：{{ quiz.category }} | タグ：{% for tag in quiz.tag.all %} # {{ tag }}{% endfor %}</p>
+            <p>問題文：{{ quiz.text|linebreaksbr }}</p>
+            {% if quiz.image %}<p><img src="{{ quiz.image.url }}" height=300></p>{% endif %}
+
+            <ul>
+                <li>{{ quiz.choice_a }}</li>
+                <li>{{ quiz.choice_b }}</li>
+                <li>{{ quiz.choice_c }}</li>
+                <li>{{ quiz.choice_d }}</li>
+            </ul>
+
+            <p>解説:<br>
+            {{ quiz.explanation|linebreaksbr }}</p>
+        </div>
+    </div>
+
+    <div>
+        <h2>こちらの問題を削除します。よろしいですか？</h2>
+        <form action="" method="post">{% csrf_token %}
+            <button type="submit" class="btn btn-dark">削除</button>
+        </form>
+    </div>
+
+    <hr>
+
+{% else %}
+    <p>権限がありません</p>
+{% endif %}
+
+<div>
+    <a href="JavaScript:history.back()">&lt;戻る</a>
+</div>
+
+{% endblock content %}

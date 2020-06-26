@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<h1>クイズ一覧　<a href="{% url 'quiz:index' %}"><button type="button" class="btn btn-outline-dark">ホームへ</button></a></h1>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>出題者</th>
+            <th>タイトル</th>
+            <th>カテゴリ</th>
+            <th>タグ</th>
+            <th>問題文</th>
+            <th>画像</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for quiz in quiz_list %}
+        <tr>
+            <th scope="row"><a href="{% url 'quiz:detail' quiz.pk %}">{{ quiz.pk }}</a></th>
+            <th>{{ quiz.author }}</th>
+            <th>{{ quiz.title }}</th>
+            <td>{{ quiz.category }}</td>
+            <td>{% for tag in quiz.tag.all %} # {{ tag }}{% endfor %}</td>
+            <td>{{ quiz.text|linebreaksbr }}</td>
+            <td>{% if quiz.image %}<img src="{{ quiz.image.url }}" height=50>{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include 'paginate.html' %}
+
+{% endblock content %}

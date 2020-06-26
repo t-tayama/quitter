@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<div class="card mb-3">
+<h2 class="card-header bg-dark text-white">{{quiz.title}}</h2>
+    <div class="card-body">
+        <p>カテゴリ：{{ quiz.category }} | タグ：{% for tag in quiz.tag.all %} # {{ tag }}{% endfor %}</p>
+        <p>問題文：{{ quiz.text|linebreaksbr }}</p>
+        {% if quiz.image %}<p><img src="{{ quiz.image.url }}" height=300></p>{% endif %}
+
+        <ul>
+            <li>{{ quiz.choice_a }}</li>
+            <li>{{ quiz.choice_b }}</li>
+            <li>{{ quiz.choice_c }}</li>
+            <li>{{ quiz.choice_d }}</li>
+        </ul>
+        <hr>
+        {% if is_correct %}
+            <h1>大正解！</h1>
+            <img src="{% static 'img/correct.png' %}" alt="correct"><br>
+            <a href="{% url 'quiz:index' %}">ホームへ戻る</a>
+        {% else %}
+            <h1>残念！</h1>
+            <img src="{% static 'img/not_correct.png' %}" alt="not correct"><br>
+            <a href="{% url 'quiz:detail' quiz.pk %}">もう一度挑戦する!</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

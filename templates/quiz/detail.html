@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<div class="card mb-3">
+<h2 class="card-header bg-dark text-white">{{quiz.title}}</h2>
+    <div class="card-body">
+        <p>カテゴリ：{{ quiz.category }} | タグ：{% for tag in quiz.tag.all %} # {{ tag }}{% endfor %}</p>
+        <p>問題文：{{ quiz.text|linebreaksbr }}</p>
+        {% if quiz.image %}<p><img src="{{ quiz.image.url }}" height=300></p>{% endif %}
+
+
+        <form action="{% url 'quiz:answer' quiz.pk %}" method="post">{% csrf_token %}
+
+            <input type="radio" name="selected" id="choice_a" value="a">
+            <label for="choice_a">{{ quiz.choice_a }}</label><br>
+            <input type="radio" name="selected" id="choice_b" value="b">
+            <label for="choice_b">{{ quiz.choice_b }}</label><br>
+            <input type="radio" name="selected" id="choice_c" value="c">
+            <label for="choice_c">{{ quiz.choice_c }}</label><br>
+            <input type="radio" name="selected" id="choice_d" value="d">
+            <label for="choice_d">{{ quiz.choice_d }}</label><br>
+            {% comment %} ボタンが押されると{"変数名": 値}の辞書が渡される 変数名はname="selected" 値はvalue="a~b"で指定 {% endcomment %}
+            <button type="submit" class='btn btn-dark'>回答する</button>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="JavaScript:history.back()">&lt;戻る</a>
+</div>
+
+
+{% endblock content %}

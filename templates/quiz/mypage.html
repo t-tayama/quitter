@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<form action="{% url 'quiz:mypage' %}" method="post">
+    <div class="btn-group btn-group-lg " role="group" aria-label="Basic example">{% csrf_token %}
+        <button type="submit" name="favorite"  class="btn btn-warning">お気に入り</button>
+        <button type="submit" name="created" class="btn btn-primary">作成した問題</button>
+        <button type="submit" name="answered"  class="btn btn-success">回答した問題</button>
+    </div>
+</form>
+
+<hr>
+
+{% if created_quiz_list %}
+    <h2>作成した問題　一覧</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>出題者</th>
+                <th>タイトル</th>
+                <th>カテゴリ</th>
+                <th>タグ</th>
+                <th>問題文</th>
+                <th>画像</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in created_quiz_list %}
+            <tr>
+                <th scope="row"><a href="{% url 'quiz:detail' quiz.pk %}">{{ quiz.pk }}</a></th>
+                <th>{{ quiz.author }}</th>
+                <th>{{ quiz.title }}</th>
+                <td>{{ quiz.category }}</td>
+                <td>{% for tag in quiz.tag.all %} # {{ tag }}{% endfor %}</td>
+                <td>{{ quiz.text|linebreaksbr }}</td>
+                <td>{% if quiz.image %}<img src="{{ quiz.image.url }}" height=50>{% endif %}</td>
+                <td><a href="{% url 'quiz:edit' quiz.pk %}">編集</a></td>
+                <td><a href="{% url 'quiz:delete' quiz.pk %}">削除</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
+{% if answer_history %}
+    <h2>回答した問題　一覧</h2>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>出題者</th>
+                <th>タイトル</th>
+                <th>カテゴリ</th>
+                <th>タグ</th>
+                <th>問題文</th>
+                <th>画像</th>
+                <th>選んだ回答</th>
+                <th>正誤</th>
+                <th>回答日</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for answer in answer_history %}
+            <tr>
+                <th scope="row"><a href="{% url 'quiz:detail' answer.quiz.pk %}">{{ answer.quiz.pk }}</a></th>
+                <th>{{ answer.quiz.author }}</th>
+                <th>{{ answer.quiz.title }}</th>
+                <td>{{ answer.quiz.category }}</td>
+                <td>{% for tag in answer.quiz.tag.all %} # {{ tag }}{% endfor %}</td>
+                <td>{{ answer.quiz.text|linebreaksbr }}</td>
+                <td>{% if answer.quiz.image %}<img src="{{ answer.quiz.image.url }}" height=50>{% endif %}</td>
+                <td>{{ answer.selected_value }}</td>
+                <td>{% if answer.is_correct %} 正解 {% else %} 不正解 {% endif %}</td>
+                <td>{{ answer.answered_at|date:'Y-m-d P' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% endblock content %}

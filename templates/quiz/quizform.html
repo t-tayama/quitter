@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+{% if request_user and request_user != quiz_author %}
+    <p>権限がありません</p>
+
+{% else %}
+    <h1>問題の{{ word }}</h1>
+    <hr>
+    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button type="submit" class='btn btn-dark'>{{ word }}の完了</button>
+    </form>
+    <hr>
+
+{% endif %}
+
+    <div>
+        <a href="JavaScript:history.back()">&lt;戻る</a>
+    </div>
+
+{% endblock content %}

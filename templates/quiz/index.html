@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block jumbotron %}
+
+<div class="jumbotron">
+    <h2>テスト用リンク</h2>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="{% url 'quiz:index' %}"><button type="button" class="btn btn-primary">/quiz/</button></a>
+        <a href="{% url 'quiz:list' %}"><button type="button" class="btn btn-primary">/quiz/list/</button></a>
+        <a href="{% url 'quiz:detail' quiz_pk=3 %}"><button type="button" class="btn btn-success">/quiz/detail/3</button></a>
+        <a href="{% url 'quiz:create' %}"><button type="button" class="btn btn-success">/quiz/create　</button></a>
+        <a href="{% url 'quiz:edit' quiz_pk=7 %}"><button type="button" class="btn btn-warning">/quiz/edit/7　作成者admin</button></a>
+        <a href="{% url 'quiz:delete' quiz_pk=7 %}"><button type="button" class="btn btn-warning">/quiz/delete/7　作成者admin</button></a>
+        <a href="{% url 'quiz:edit' quiz_pk=3 %}"><button type="button" class="btn btn-danger">/quiz/edit/3　作成者cat</button></a>
+        <a href="{% url 'quiz:delete' quiz_pk=3 %}"><button type="button" class="btn btn-danger">/quiz/delete/3　作成者cat</button></a>
+        <a href="{% url 'quiz:mypage' %}"><button type="button" class="btn btn-success">/quiz/mypage　</button></a>
+    </div>
+</div>
+{% endblock jumbotron %}
+
+
+{% block content %}
+
+
+
+<h2>最新クイズ　<a href="{% url 'quiz:list' %}"><button type="button" class="btn btn-outline-dark">一覧で見る</button></a></h2>
+
+{% if latest_quiz_list %}
+
+    {% for quiz in latest_quiz_list %}
+    <div class="card mb-3">
+        <h2 class="card-header bg-dark text-white">{{quiz.title}}</h2>
+        <div class="card-body">
+            <p>出題者：{{ quiz.author }} | 作成日:{{ quiz.created_at|date:'Y-m-d P' }}</p>
+            <p>カテゴリ：{{ quiz.category }} | タグ：{% for tag in quiz.tag.all %} # {{ tag }}{% endfor %}</p>
+            <p>問題：{{ quiz.text|linebreaksbr }}</p>
+            {% if quiz.image %}<p><img src="{{ quiz.image.url }}" height=300></p>{% endif %}
+            <hr>
+            <a href="{% url 'quiz:detail' quiz.pk %}" class="btn bg-dark text-white">回答する</a>
+        </div>
+    </div>
+    {% endfor %}
+
+{% else %}
+    <p>回答可能なクイズがありません</p>
+{% endif %}
+
+{% endblock content %}
